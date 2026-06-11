@@ -20,7 +20,9 @@ export class ProfileRepositoryInMemory implements IProfileRepository {
 
     profile.version = lastVersion + 1
 
-    this.profiles.unshift(profile)
-    return await Promise.resolve(profile)
+    const profileToSave = JSON.parse(JSON.stringify(profile)) as Profile
+
+    this.profiles.unshift(profileToSave)
+    return await Promise.resolve(profileToSave)
   }
 }

@@ -13,7 +13,6 @@ import { createProfileFixture } from './fixtures/profile'
 describe('Profile Module (e2e)', () => {
   let app: INestApplication<App>
   let inMemoryRepository: ProfileRepositoryInMemory
-  const profile = createProfileFixture()
 
   beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
@@ -40,6 +39,8 @@ describe('Profile Module (e2e)', () => {
   })
 
   it('/profile (POST)', async () => {
+    const profile = createProfileFixture()
+
     const response = await request(app.getHttpServer())
       .post('/profile')
       .send(profile)
@@ -52,6 +53,8 @@ describe('Profile Module (e2e)', () => {
     const response = await request(app.getHttpServer()).get('/profile')
 
     expect(response.status).toBe(200)
-    expect(response.body).toMatchObject({ data: profile })
+    expect(response.body).toMatchObject({
+      data: inMemoryRepository.profiles[0],
+    })
   })
 })

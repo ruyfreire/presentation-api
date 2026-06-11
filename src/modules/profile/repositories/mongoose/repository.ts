@@ -39,7 +39,6 @@ export class ProfileMongooseRepository implements IProfileRepository {
     const saved = await this.profileModel.create({
       ...profile,
       version: counter.version,
-      profileId: profile.profileId,
     })
 
     return ProfileMapper.toDomain(saved)
