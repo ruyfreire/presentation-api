@@ -6,4 +6,7 @@ export const envSchema = z.object({
   MONGODB_URI: z.string({
     error: 'MONGODB_URI environment is required',
   }),
+  JWT_SECRET: z.string({
+    error: 'JWT_SECRET environment is required',
+  }),
 })
