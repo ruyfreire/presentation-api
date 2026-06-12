@@ -20,8 +20,8 @@ export class EducationDto {
   degree: string | null
 
   @IsDateString()
-  @IsOptional()
-  startDate: Date | null
+  @IsNotEmpty()
+  startDate: Date
 
   @IsDateString()
   @IsOptional()
