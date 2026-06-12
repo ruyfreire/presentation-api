@@ -1,6 +1,6 @@
 # presentation-api
 
-API para consumir dados de apresentação pessoal
+API para consumir dados de apresentação profissional
 
 ## Instalação
 

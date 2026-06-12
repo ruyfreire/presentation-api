@@ -32,7 +32,7 @@ const EducationSchema = new Schema<Education>({
   title: { type: String, required: true },
   institution: { type: String, required: true },
   degree: { type: String, default: null },
-  startDate: { type: Date, default: null },
+  startDate: { type: Date, required: true },
   endDate: { type: Date, default: null },
   certificateUrl: { type: String, default: null },
   description: { type: String, default: null },
