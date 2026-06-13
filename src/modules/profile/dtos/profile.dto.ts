@@ -3,6 +3,7 @@ import {
   IsNotEmpty,
   IsOptional,
   IsString,
+  IsUrl,
   ValidateNested,
 } from 'class-validator'
 
@@ -26,6 +27,11 @@ export class ProfileDto {
   @IsString()
   @IsOptional()
   bio: string | null
+
+  @IsString()
+  @IsOptional()
+  @IsUrl({ protocols: ['https'], require_protocol: true })
+  imageUrl: string | null
 
   @ValidateNested()
   contact: ContactDto

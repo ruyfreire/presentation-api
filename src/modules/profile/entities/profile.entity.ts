@@ -6,6 +6,7 @@ export class Profile {
   id: string
   version: number
   profileId: string
+  imageUrl: string | null
   name: string
   role: string
   bio: string | null

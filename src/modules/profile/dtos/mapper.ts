@@ -9,6 +9,7 @@ export class ProfileDtoMapper {
     profile.name = raw.name
     profile.role = raw.role
     profile.bio = raw.bio
+    profile.imageUrl = raw.imageUrl
     profile.skills = raw.skills
 
     const contact = new Contact()

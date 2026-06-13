@@ -11,6 +11,7 @@ export class ProfileMapper {
     domainProfile.name = raw.name
     domainProfile.role = raw.role
     domainProfile.bio = raw.bio
+    domainProfile.imageUrl = raw.imageUrl
     domainProfile.skills = raw.skills
 
     const contact = new Contact()
