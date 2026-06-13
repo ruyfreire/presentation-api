@@ -9,6 +9,9 @@ const createProfileFixture = (profile?: ProfileDto) => {
   profileDto.name = profile?.name || 'Profile Name'
   profileDto.role = profile?.role || 'Profile Role'
   profileDto.profileId = profile?.profileId || 'default'
+  profileDto.imageUrl = profile?.imageUrl || 'https://example.com/image.jpg'
+  profileDto.bio = profile?.bio || 'Profile Bio'
+  profileDto.skills = profile?.skills || ['Skill 1']
 
   const contactDto = new ContactDto()
   contactDto.location = profile?.contact?.location || 'Profile Location'
@@ -22,6 +25,11 @@ const createProfileFixture = (profile?: ProfileDto) => {
   experienceDto.startDate = new Date(
     '2024-07-22',
   ).toISOString() as unknown as Date
+  experienceDto.endDate = new Date(
+    '2026-06-13',
+  ).toISOString() as unknown as Date
+  experienceDto.description = 'Experience Description'
+  experienceDto.tags = ['Tag 1']
   profileDto.experiences = profile?.experiences || [experienceDto]
 
   const educationDto = new EducationDto()
@@ -30,9 +38,14 @@ const createProfileFixture = (profile?: ProfileDto) => {
   educationDto.startDate = new Date(
     '2012-01-01',
   ).toISOString() as unknown as Date
+  educationDto.endDate = new Date('2018-01-01').toISOString() as unknown as Date
+  educationDto.description = 'Education Description'
+  educationDto.tags = ['Tag 1']
+  educationDto.certificateUrl = 'https://example.com/certificate.pdf'
+  educationDto.degree = 'Degree'
   profileDto.education = profile?.education || [educationDto]
 
-  return JSON.parse(JSON.stringify(profileDto)) as ProfileDto
+  return profileDto
 }
 
 export { createProfileFixture }

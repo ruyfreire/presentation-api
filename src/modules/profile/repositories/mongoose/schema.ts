@@ -46,6 +46,7 @@ export const ProfileSchema = new Schema<Profile>(
     name: { type: String, required: true, trim: true },
     role: { type: String, required: true },
     bio: { type: String, default: null },
+    imageUrl: { type: String, default: null },
     contact: { type: ContactSchema, required: true },
     skills: [{ type: String, trim: true, default: null }],
     experiences: [ExperienceSchema],
