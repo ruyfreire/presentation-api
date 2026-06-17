@@ -1,5 +1,7 @@
 import { Module } from '@nestjs/common'
 import { ConfigModule } from '@nestjs/config'
+import { APP_FILTER } from '@nestjs/core'
+import { SentryGlobalFilter, SentryModule } from '@sentry/nestjs/setup'
 
 import { DatabaseModule } from './database/database.module'
 import { AuthModule } from './modules/auth/auth.module'
@@ -8,6 +10,7 @@ import { envSchema } from './utils/env'
 
 @Module({
   imports: [
+    SentryModule.forRoot(),
     ConfigModule.forRoot({
       isGlobal: true,
       validate: (objectEnvs) => envSchema.parse(objectEnvs),
@@ -17,6 +20,11 @@ import { envSchema } from './utils/env'
     ProfileModule,
   ],
   controllers: [],
-  providers: [],
+  providers: [
+    {
+      provide: APP_FILTER,
+      useClass: SentryGlobalFilter,
+    },
+  ],
 })
 export class AppModule {}
