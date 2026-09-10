@@ -15,10 +15,6 @@ async function bootstrap() {
       'API to serve profile data for the [presentation](https://presentation-nextjs-eta.vercel.app) front-end',
     )
     .addGlobalResponse({
-      status: 401,
-      description: 'Unauthorized',
-    })
-    .addGlobalResponse({
       status: 500,
       description: 'Internal Server Error',
     })

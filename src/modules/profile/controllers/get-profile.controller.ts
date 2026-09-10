@@ -39,7 +39,7 @@ export class GetProfileController {
   })
   @Public()
   @Get('')
-  getProfile(@Query('profileId') profileId: string) {
+  getProfile(@Query('profileId') profileId?: string) {
     return this.getProfileService.execute(profileId ?? 'default')
   }
 }

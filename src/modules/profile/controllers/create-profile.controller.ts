@@ -4,6 +4,7 @@ import {
   ApiCreatedResponse,
   ApiOperation,
   ApiTags,
+  ApiUnauthorizedResponse,
   getSchemaPath,
 } from '@nestjs/swagger'
 
@@ -36,6 +37,7 @@ export class CreateProfileController {
     },
   })
   @ApiBadRequestResponse({ description: 'Bad Request' })
+  @ApiUnauthorizedResponse({ description: 'Unauthorized' })
   @Post('')
   createProfile(@Body() profile: ProfileDto) {
     return this.createProfileService.execute(ProfileDtoMapper.toDomain(profile))
