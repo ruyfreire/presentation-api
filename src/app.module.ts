@@ -3,6 +3,7 @@ import { ConfigModule } from '@nestjs/config'
 
 import { DatabaseModule } from './database/database.module'
 import { AuthModule } from './modules/auth/auth.module'
+import { HealthModule } from './modules/health/health.module'
 import { ProfileModule } from './modules/profile/profile.module'
 import { envSchema } from './utils/env'
 
@@ -14,6 +15,7 @@ import { envSchema } from './utils/env'
     }),
     DatabaseModule,
     AuthModule,
+    HealthModule,
     ProfileModule,
   ],
   controllers: [],
