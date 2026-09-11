@@ -1,4 +1,4 @@
-import { Controller, Get, HttpCode, HttpStatus } from '@nestjs/common'
+import { Controller, Get, Header, HttpCode, HttpStatus } from '@nestjs/common'
 import { ApiNoContentResponse, ApiOperation, ApiTags } from '@nestjs/swagger'
 
 import { Public } from '../../auth/auth.decorators'
@@ -10,6 +10,12 @@ export class GetHealthController {
   @ApiNoContentResponse({ description: 'API is online' })
   @Public()
   @HttpCode(HttpStatus.NO_CONTENT)
+  @Header(
+    'Cache-Control',
+    'no-store, no-cache, must-revalidate, proxy-revalidate',
+  )
+  @Header('Pragma', 'no-cache')
+  @Header('Expires', '0')
   @Get('')
   getHealth() {}
 }
