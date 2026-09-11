@@ -3,7 +3,7 @@ import { ApiNoContentResponse, ApiOperation, ApiTags } from '@nestjs/swagger'
 
 import { Public } from '../../auth/auth.decorators'
 
-@Controller('health')
+@Controller('api-status')
 @ApiTags('Health')
 export class GetHealthController {
   @ApiOperation({ summary: 'Check if the API is online' })
