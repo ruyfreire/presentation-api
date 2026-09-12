@@ -8,6 +8,7 @@ import {
   ApiUnauthorizedResponse,
   getSchemaPath,
 } from '@nestjs/swagger'
+import { Throttle } from '@nestjs/throttler'
 
 import { ProfileDtoMapper } from '../dtos/mapper'
 import { ProfileDto } from '../dtos/profile.dto'
@@ -38,6 +39,7 @@ export class CreateProfileController {
   })
   @ApiBadRequestResponse({ description: 'Bad Request' })
   @ApiUnauthorizedResponse({ description: 'Unauthorized' })
+  @Throttle({ default: { limit: 5, ttl: 60_000 } })
   @Post('')
   createProfile(@Body() profile: ProfileDto) {
     return this.createProfileService.execute(ProfileDtoMapper.toDomain(profile))

@@ -9,6 +9,17 @@ export const envSchema = z.object({
   JWT_SECRET: z.string({
     error: 'JWT_SECRET environment is required',
   }),
+  CORS_ORIGINS: z
+    .string({
+      error: 'CORS_ORIGINS environment is required',
+    })
+    .transform((value) =>
+      value
+        .split(',')
+        .map((origin) => origin.trim())
+        .filter(Boolean),
+    )
+    .pipe(z.array(z.url()).min(1)),
 })
 
 export const env = envSchema.parse(process.env)

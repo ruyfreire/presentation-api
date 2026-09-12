@@ -1,12 +1,25 @@
 import { ValidationPipe } from '@nestjs/common'
 import { NestFactory } from '@nestjs/core'
+import { NestExpressApplication } from '@nestjs/platform-express'
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger'
+import helmet from 'helmet'
 
 import { AppModule } from './app.module'
 import { env } from './utils/env'
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule, { cors: true })
+  const app = await NestFactory.create<NestExpressApplication>(AppModule)
+  app.set('trust proxy', 1)
+  app.use(
+    helmet({
+      contentSecurityPolicy: false,
+      crossOriginResourcePolicy: { policy: 'cross-origin' },
+    }),
+  )
+  app.enableCors({
+    origin: env.CORS_ORIGINS,
+    methods: ['GET', 'POST', 'OPTIONS'],
+  })
   app.useGlobalPipes(new ValidationPipe())
 
   const config = new DocumentBuilder()
