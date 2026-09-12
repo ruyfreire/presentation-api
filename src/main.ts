@@ -12,7 +12,12 @@ async function bootstrap() {
   app.set('trust proxy', 1)
   app.use(
     helmet({
-      contentSecurityPolicy: false,
+      contentSecurityPolicy: {
+        directives: {
+          scriptSrc: ["'self'", "'unsafe-eval'"],
+          imgSrc: ["'self'", 'data:', 'validator.swagger.io'],
+        },
+      },
       crossOriginResourcePolicy: { policy: 'cross-origin' },
     }),
   )
