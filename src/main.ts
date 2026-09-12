@@ -10,17 +10,7 @@ import { env } from './utils/env'
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule)
   app.set('trust proxy', 1)
-  app.use(
-    helmet({
-      contentSecurityPolicy: {
-        directives: {
-          scriptSrc: ["'self'", "'unsafe-eval'"],
-          imgSrc: ["'self'", 'data:', 'validator.swagger.io'],
-        },
-      },
-      crossOriginResourcePolicy: { policy: 'cross-origin' },
-    }),
-  )
+  app.use(helmet())
   app.enableCors({
     origin: env.CORS_ORIGINS,
     methods: ['GET', 'POST', 'OPTIONS'],
