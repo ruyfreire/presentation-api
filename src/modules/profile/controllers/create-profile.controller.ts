@@ -2,6 +2,7 @@ import { Body, Controller, Post } from '@nestjs/common'
 import {
   ApiBadRequestResponse,
   ApiCreatedResponse,
+  ApiExtraModels,
   ApiOperation,
   ApiTags,
   ApiUnauthorizedResponse,
@@ -10,17 +11,16 @@ import {
 
 import { ProfileDtoMapper } from '../dtos/mapper'
 import { ProfileDto } from '../dtos/profile.dto'
+import { Profile } from '../entities'
 import { CreateProfileService } from '../services/create-profile.service'
 
 @Controller('profile')
 @ApiTags('Profile')
+@ApiExtraModels(Profile)
 export class CreateProfileController {
   constructor(private readonly createProfileService: CreateProfileService) {}
 
-  @ApiOperation({
-    summary: 'Create a new profile [Protected]',
-    security: [{ bearer: [] }],
-  })
+  @ApiOperation({ summary: 'Create a new profile [Protected]' })
   @ApiCreatedResponse({
     description: 'Profile created successfully',
     schema: {
@@ -31,7 +31,7 @@ export class CreateProfileController {
           example: 'Profile created successfully',
         },
         data: {
-          $ref: getSchemaPath(ProfileDto),
+          $ref: getSchemaPath(Profile),
         },
       },
     },
