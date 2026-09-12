@@ -4,6 +4,7 @@ import {
   ApiNotFoundResponse,
   ApiOkResponse,
   ApiOperation,
+  ApiQuery,
   ApiTags,
   getSchemaPath,
 } from '@nestjs/swagger'
@@ -36,6 +37,13 @@ export class GetProfileController {
   })
   @ApiNotFoundResponse({
     description: `Profile not found with profileId 'default'`,
+  })
+  @ApiQuery({
+    name: 'profileId',
+    required: false,
+    description: 'The ID of the profile to get',
+    default: 'default',
+    type: String,
   })
   @Public()
   @Get('')
