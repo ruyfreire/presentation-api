@@ -1,6 +1,29 @@
 # presentation-api
 
-API para consumir dados de apresentação profissional
+API NestJS que serve os dados do meu [currículo vivo](https://presentation-nextjs-eta.vercel.app).
+
+## Tecnologias
+
+- NestJS
+- TypeScript
+- Mongoose
+- Zod
+- JWT
+- CORS
+- Helmet
+- Throttler
+- Swagger
+- Jest
+- Supertest
+- New Relic
+- ESLint
+- Prettier
+- Husky
+- Docker
+
+## Arquitetura
+
+- [Arquitetura](./ARCHITECTURE.md)
 
 ## Instalação
 
@@ -14,28 +37,53 @@ pnpm install
 cp .env.example .env
 ```
 
+| Variável                    | Descrição                                           |
+| --------------------------- | --------------------------------------------------- |
+| `PORT` / `HOST`             | `4000` / `0.0.0.0`                                  |
+| `MONGODB_URI`               | URI de conexão com o banco                          |
+| `JWT_SECRET`                | Secret para o token JWT                             |
+| `CORS_ORIGINS`              | String de origens permitidas, separadas por vírgula |
+| `NEW_RELIC_CONFIG_FILENAME` | Nome do arquivo de configuração do New Relic        |
+| `NEW_RELIC_APP_NAME`        | Nome da aplicação no New Relic                      |
+| `NEW_RELIC_LICENSE_KEY`     | Chave de licença do New Relic                       |
+
+_New Relic só carrega em produção, as envs `NEW_RELIC_` são ignoradas em desenvolvimento._
+
 ## Banco de dados local (MongoDB)
 
 ```bash
 docker compose up -d
 ```
 
+## Desenvolvimento
+
+```bash
+pnpm start:dev
+```
+
+A API sobe em [http://localhost:4000](http://localhost:4000). A documentação local fica em [http://localhost:4000/docs](http://localhost:4000/docs)
+
 ## Compilação e execução
 
 ```bash
-# executar em modo de desenvolvimento
-pnpm run start:dev
-
 # gerar build
-pnpm run build
+pnpm build
 
-# executar build
-pnpm run start:prod
+# executar build (com New Relic)
+pnpm start:prod
 ```
 
 ## Testes
 
 ```bash
-# testes e2e
-pnpm run test:e2e
+# testes e2e (repositório em memória, sem Mongo)
+pnpm test:e2e
+```
+
+## Lint
+
+```bash
+pnpm type-check
+pnpm lint:check
+pnpm format:check
 ```

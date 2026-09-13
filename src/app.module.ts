@@ -17,7 +17,7 @@ import { envSchema } from './utils/env'
       validate: (objectEnvs) => envSchema.parse(objectEnvs),
     }),
     ThrottlerModule.forRoot({
-      throttlers: [{ name: 'default', ttl: 60_000, limit: 30 }],
+      throttlers: [{ name: 'default', ttl: 60_000, limit: 10 }],
     }),
     DatabaseModule,
     AuthModule,
