@@ -8,7 +8,9 @@ API NestJS que serve os dados do meu [currículo vivo](https://presentation-next
 - TypeScript
 - Mongoose
 - Zod
-- JWT
+- Passport JWT
+- bcrypt
+- CSRF-CSRF
 - CORS
 - Helmet
 - Throttler
@@ -37,17 +39,18 @@ pnpm install
 cp .env.example .env
 ```
 
-| Variável                    | Descrição                                           |
-| --------------------------- | --------------------------------------------------- |
-| `PORT` / `HOST`             | `4000` / `0.0.0.0`                                  |
-| `MONGODB_URI`               | URI de conexão com o banco                          |
-| `JWT_SECRET`                | Secret para o token JWT                             |
-| `CORS_ORIGINS`              | String de origens permitidas, separadas por vírgula |
-| `NEW_RELIC_CONFIG_FILENAME` | Nome do arquivo de configuração do New Relic        |
-| `NEW_RELIC_APP_NAME`        | Nome da aplicação no New Relic                      |
-| `NEW_RELIC_LICENSE_KEY`     | Chave de licença do New Relic                       |
+| Variável                    | Descrição                                           | Obrigatório |
+| --------------------------- | --------------------------------------------------- | ----------- |
+| `PORT` / `HOST`             | Porta e host que o Nest sobe                        | Não         |
+| `MONGODB_URI`               | URI de conexão com o banco                          | Sim         |
+| `JWT_SECRET`                | Secret para o token JWT                             | Sim         |
+| `JWT_EXPIRES_MS`            | Validade do JWT e do cookie, em milissegundos       | Não         |
+| `CORS_ORIGINS`              | String de origens permitidas, separadas por vírgula | Sim         |
+| `NEW_RELIC_CONFIG_FILENAME` | Nome do arquivo de configuração do New Relic        | Não         |
+| `NEW_RELIC_APP_NAME`        | Nome da aplicação no New Relic                      | Não         |
+| `NEW_RELIC_LICENSE_KEY`     | Chave de licença do New Relic                       | Não         |
 
-_New Relic só carrega em produção, as envs `NEW_RELIC_` são ignoradas em desenvolvimento._
+_New Relic só carrega em produção, as envs_ `NEW_RELIC_` _são ignoradas em desenvolvimento._
 
 ## Banco de dados local (MongoDB)
 
