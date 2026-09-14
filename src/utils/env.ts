@@ -9,6 +9,7 @@ export const envSchema = z.object({
   JWT_SECRET: z.string({
     error: 'JWT_SECRET environment is required',
   }),
+  JWT_EXPIRES_MS: z.coerce.number().default(1000 * 60 * 60 * 24),
   CORS_ORIGINS: z
     .string({
       error: 'CORS_ORIGINS environment is required',
@@ -22,4 +23,8 @@ export const envSchema = z.object({
     .pipe(z.array(z.url()).min(1)),
 })
 
-export const env = envSchema.parse(process.env)
+export type Env = z.infer<typeof envSchema>
+
+export function isProductionEnv() {
+  return process.env.NODE_ENV === 'production'
+}
