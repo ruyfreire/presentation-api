@@ -8,7 +8,7 @@ import { AuthGuard } from './modules/auth/auth.guard'
 import { AuthModule } from './modules/auth/auth.module'
 import { HealthModule } from './modules/health/health.module'
 import { ProfileModule } from './modules/profile/profile.module'
-import { envSchema } from './utils/env'
+import { envSchema, isProductionEnv } from './utils/env'
 
 @Module({
   imports: [
@@ -18,6 +18,7 @@ import { envSchema } from './utils/env'
     }),
     ThrottlerModule.forRoot({
       throttlers: [{ name: 'default', ttl: 60_000, limit: 10 }],
+      skipIf: () => !isProductionEnv(),
     }),
     DatabaseModule,
     AuthModule,

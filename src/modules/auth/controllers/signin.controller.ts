@@ -93,6 +93,8 @@ export class SigninController {
       maxAge,
     })
 
+    req.cookies[ACCESS_TOKEN_COOKIE] = accessToken
+
     const csrfToken = req.csrfToken?.({ overwrite: true })
 
     if (!csrfToken) {

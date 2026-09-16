@@ -34,7 +34,7 @@ async function bootstrap() {
     cookieName: isProductionEnv() ? undefined : CSRF_TOKEN_COOKIE,
     getSecret: () => configService.getOrThrow('CSRF_SECRET', { infer: true }),
     getSessionIdentifier: (req) =>
-      req.header(ACCESS_TOKEN_COOKIE) || 'anonymous',
+      (req.cookies[ACCESS_TOKEN_COOKIE] as string | undefined) || 'anonymous',
     cookieOptions: {
       sameSite: isProductionEnv() ? 'none' : undefined,
       maxAge: configService.getOrThrow('COOKIE_EXPIRES_MS', { infer: true }),
