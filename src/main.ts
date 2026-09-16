@@ -32,12 +32,12 @@ async function bootstrap() {
 
   const { doubleCsrfProtection } = doubleCsrf({
     cookieName: isProductionEnv() ? undefined : CSRF_TOKEN_COOKIE,
-    getSecret: () => configService.getOrThrow('JWT_SECRET', { infer: true }),
+    getSecret: () => configService.getOrThrow('CSRF_SECRET', { infer: true }),
     getSessionIdentifier: (req) =>
       req.header(ACCESS_TOKEN_COOKIE) || 'anonymous',
     cookieOptions: {
       sameSite: isProductionEnv() ? 'none' : undefined,
-      maxAge: configService.getOrThrow('JWT_EXPIRES_MS', { infer: true }),
+      maxAge: configService.getOrThrow('COOKIE_EXPIRES_MS', { infer: true }),
     },
     errorConfig: {
       message: 'Invalid CSRF token',

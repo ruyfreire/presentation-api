@@ -81,7 +81,7 @@ export class SigninController {
     @Res({ passthrough: true }) res: Response,
   ) {
     const { accessToken } = await this.signinService.execute(signinDto)
-    const maxAge = this.configService.getOrThrow('JWT_EXPIRES_MS', {
+    const maxAge = this.configService.getOrThrow('COOKIE_EXPIRES_MS', {
       infer: true,
     })
 

@@ -44,7 +44,8 @@ cp .env.example .env
 | `PORT` / `HOST`             | Porta e host que o Nest sobe                        | Não         |
 | `MONGODB_URI`               | URI de conexão com o banco                          | Sim         |
 | `JWT_SECRET`                | Secret para o token JWT                             | Sim         |
-| `JWT_EXPIRES_MS`            | Validade do JWT e do cookie, em milissegundos       | Não         |
+| `CSRF_SECRET`               | Secret para o CSRF token                            | Sim         |
+| `COOKIE_EXPIRES_MS`         | Validade do JWT e do cookie, em milissegundos       | Não         |
 | `CORS_ORIGINS`              | String de origens permitidas, separadas por vírgula | Sim         |
 | `NEW_RELIC_CONFIG_FILENAME` | Nome do arquivo de configuração do New Relic        | Não         |
 | `NEW_RELIC_APP_NAME`        | Nome da aplicação no New Relic                      | Não         |
