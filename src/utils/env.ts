@@ -9,7 +9,10 @@ export const envSchema = z.object({
   JWT_SECRET: z.string({
     error: 'JWT_SECRET environment is required',
   }),
-  JWT_EXPIRES_MS: z.coerce.number().default(1000 * 60 * 60 * 24),
+  CSRF_SECRET: z.string({
+    error: 'CSRF_SECRET environment is required',
+  }),
+  COOKIE_EXPIRES_MS: z.coerce.number().default(1000 * 60 * 60 * 24),
   CORS_ORIGINS: z
     .string({
       error: 'CORS_ORIGINS environment is required',
