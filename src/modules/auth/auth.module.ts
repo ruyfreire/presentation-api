@@ -5,7 +5,11 @@ import { MongooseModule } from '@nestjs/mongoose'
 import { PassportModule } from '@nestjs/passport'
 import { Env } from 'src/utils/env'
 
-import { LogoutController, SigninController } from './controllers'
+import {
+  GetMeController,
+  LogoutController,
+  SigninController,
+} from './controllers'
 import { User } from './entities'
 import { UserMongooseRepository } from './repositories/mongoose/repository'
 import { UserSchema } from './repositories/mongoose/schema'
@@ -25,7 +29,7 @@ import { JwtStrategy } from './strategies/jwt.strategy'
     }),
     MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
   ],
-  controllers: [SigninController, LogoutController],
+  controllers: [SigninController, LogoutController, GetMeController],
   providers: [
     UserRepository,
     {

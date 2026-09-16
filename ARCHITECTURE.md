@@ -26,6 +26,9 @@ sequenceDiagram
   API->>API: bcrypt.compare e jwt.sign
   API-->>Client: Set-Cookie access_token HttpOnly
   API-->>Client: body csrfToken
+  Client->>API: GET /auth/me cookie
+  API->>API: JwtStrategy
+  API-->>Client: user
   Client->>API: POST /profile cookie e X-CSRF-Token
   API->>API: JwtStrategy e CsrfGuard
   Client->>API: POST /auth/logout
@@ -46,43 +49,29 @@ controller  →  service  →  repository (interface)  →  mongoose
 ```text
 src/
   main.ts                 Helmet, CORS, CSRF, cookie-parser, ValidationPipe, Swagger
-  app.module.ts           guards globais (JWT cookie, throttler)
-  database/               conexão banco de dados
+  app.module.ts           Guards globais (JWT cookie, throttler)
+  database/               Conexão banco de dados
+  utils/                  Utilitários globais da aplicação
   modules/
     auth/
-      controllers/        rotas de auth
-      services/           serviços do alth
-      dtos/               dtos dos POSTs
-      entities/           Entidades de domino do auth
-      repositories/       Queries de auth
+      controllers/        Rotas
+      services/           Serviços
+      dtos/               Contrato de escrita (class-validator)
+      entities/           Entidades de domino
+      repositories/       Queries com banco
       strategies/         Estrategias passport
     health/               GET /api-status — ping no Mongo
     profile/
-      controllers/        HTTP
-      services/           orquestração
-      dtos/               contrato de escrita (class-validator)
-      entities/           domínio
-      repositories/
-        *.interface.ts    porta
-        mongoose/         schema, mapper, implementação
-  utils/
-    env.ts               parser de variáveis de ambiente
-    auth-cookie.ts       utilitários de autenticação
+      controllers/        Criar e recuperar dados do perfil
+      services/           Serviços do perfil
+      dtos/               Contrato de escrita (class-validator)
+      entities/           Entidades de domino
+      repositories/       Queries com banco
 ```
 
 ## Auth
 
-O `AuthGuard` (Passport JWT) é global. O token fica no cookie HttpOnly `access_token` — salvo rotas com `@Public()`. Mutações autenticadas também passam pelo CSRF, que exige cookie HttpOnly e o csrfToken retornado no login.
-
-| Rota                | Auth                                                      |
-| ------------------- | --------------------------------------------------------- |
-| `GET /profile`      | público                                                   |
-| `GET /api-status`   | público                                                   |
-| `POST /auth/signin` | público; seta cookie JWT e CSRF e devolve csrfToken       |
-| `POST /auth/logout` | público; remove cookies                                   |
-| `POST /profile`     | cookie `access_token` e `CSRF` + `x-csrf-token` no header |
-
-Leitura pública, escrita autenticada.
+O `AuthGuard` (Passport JWT) é global. O token fica no cookie HttpOnly `access_token` — salvo rotas com `@Public()`. Mutações autenticadas também passam pelo CSRF, que exige cookie HttpOnly e o csrfToken retornado no login. Leitura pública, escrita autenticada.
 
 ## Versionamento
 
@@ -90,14 +79,15 @@ Cada `POST /profile` incrementa um contador por `profileId` e **insere** um docu
 
 O `GET /profile` devolve só a última versão. O número vem no payload (`version`).
 
-## Superfície HTTP
+## Rotas
 
-| Método | Path           | Papel                                                                                                   |
-| ------ | -------------- | ------------------------------------------------------------------------------------------------------- |
-| `POST` | `/auth/signin` | Login com `email` e `password`. Seta o cookie HttpOnly e devolve `csrfToken`.                           |
-| `POST` | `/auth/logout` | Remove o cookie JWT e o cookie CSRF.                                                                    |
-| `GET`  | `/profile`     | GET do currículo vigente. Aceita parâmetro `profileId` para definir o perfil. (valor padrão: `default`) |
-| `POST` | `/profile`     | Rota protegida para criar nova versão do currículo, com o nome de `profileId` recebido no corpo         |
-| `GET`  | `/api-status`  | Health da API **e** do Mongo.                                                                           |
+| Método | Path           | Auth      | Papel                                                                                                      |
+| ------ | -------------- | --------- | ---------------------------------------------------------------------------------------------------------- |
+| `POST` | `/auth/signin` | pública   | Login com `email` e `password`. Seta o cookie HttpOnly e devolve `csrfToken`.                              |
+| `GET`  | `/auth/me`     | protegida | Devolve o `user` da sessão.                                                                                |
+| `POST` | `/auth/logout` | protegida | Remove o cookie JWT e o cookie CSRF.                                                                       |
+| `GET`  | `/profile`     | pública   | Retorna o currículo vigente. Aceita parâmetro `profileId` para definir o perfil. (valor padrão: `default`) |
+| `POST` | `/profile`     | protegida | Cria nova versão do currículo, com o nome de `profileId` recebido no corpo                                 |
+| `GET`  | `/api-status`  | pública   | Retorna o status da API e do Mongo.                                                                        |
 
 CORS aceita só origens em `CORS_ORIGINS`, com `credentials`. Throttler global (10 req/min) e POSTs de escrita (5/min).

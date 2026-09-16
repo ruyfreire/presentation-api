@@ -3,5 +3,5 @@ export type JwtPayload = {
 }
 
 export type JwtUser = {
-  userId: string
+  id: string
 }
