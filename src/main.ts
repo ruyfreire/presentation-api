@@ -56,7 +56,7 @@ async function bootstrap() {
       \n\n **Autenticação**
       \n_Se não atender aos requisitos de autenticação, receberá erro 401 Unauthorized ou 403 Forbidden._
       \n- Todos os endpoints protegidos utilizam cookie HttpOnly com jwt.
-      \n- Todos os endpoints protegidos utilizam cookie HttpOnly com CSRF e exigem o token CSRF no header 'x-csrf-token'.
+      \n- Endpoints de mutação protegidos (POST, PUT, PATCH, DELETE) utilizam cookie HttpOnly com CSRF e exigem o token CSRF no header 'x-csrf-token'.
       `,
     )
     .addGlobalResponse({
