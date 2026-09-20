@@ -19,8 +19,8 @@ import {
 } from '@nestjs/swagger'
 import { Throttle } from '@nestjs/throttler'
 import type { Request, Response } from 'express'
-import { ACCESS_TOKEN_COOKIE } from 'src/utils/auth-cookie'
-import { Env, isProductionEnv } from 'src/utils/env'
+import { getAuthCookieOptions } from 'src/utils/auth-cookie'
+import { Env } from 'src/utils/env'
 
 import { Public } from '../auth.decorators'
 import { SigninDto } from '../dtos/signin.dto'
@@ -29,7 +29,6 @@ import { SigninService } from '../services/signin.service'
 @Controller('auth')
 @ApiTags('Auth')
 export class SigninController {
-  private readonly isProduction = isProductionEnv()
   private readonly logger = new Logger(SigninController.name)
 
   constructor(
@@ -40,16 +39,7 @@ export class SigninController {
   @ApiOperation({ summary: 'Sign in and set the HttpOnly JWT cookie' })
   @ApiOkResponse({
     description:
-      'Signed in successfully. JWT is set in the HttpOnly access_token cookie and the CSRF token is returned in the body.',
-    headers: {
-      'Set-Cookie': {
-        description: 'HttpOnly JWT cookie named access_token',
-        schema: {
-          type: 'string',
-          example: 'access_token=...; Path=/; HttpOnly; SameSite=Lax',
-        },
-      },
-    },
+      'Signed in successfully. JWT is set in the HttpOnly cookie and the CSRF token is returned in the body.',
     schema: {
       type: 'object',
       properties: {
@@ -62,7 +52,7 @@ export class SigninController {
           properties: {
             csrfToken: {
               type: 'string',
-              example: 'csrf-token',
+              example: '1234567890',
             },
           },
         },
@@ -81,21 +71,15 @@ export class SigninController {
     @Res({ passthrough: true }) res: Response,
   ) {
     const { accessToken } = await this.signinService.execute(signinDto)
-    const maxAge = this.configService.getOrThrow('COOKIE_EXPIRES_MS', {
+    const jwtCookieName = this.configService.getOrThrow('JWT_COOKIE_NAME', {
       infer: true,
     })
 
-    res.cookie(ACCESS_TOKEN_COOKIE, accessToken, {
-      httpOnly: true,
-      sameSite: this.isProduction ? 'none' : 'lax',
-      secure: this.isProduction,
-      path: '/',
-      maxAge,
-    })
+    res.cookie(jwtCookieName, accessToken, getAuthCookieOptions())
 
-    req.cookies[ACCESS_TOKEN_COOKIE] = accessToken
+    req.cookies[jwtCookieName] = accessToken
 
-    const csrfToken = req.csrfToken?.({ overwrite: true })
+    const csrfToken = req.csrfToken?.()
 
     if (!csrfToken) {
       this.logger.error('Failed to generate CSRF token')
