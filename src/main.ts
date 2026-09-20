@@ -9,11 +9,10 @@ import helmet from 'helmet'
 
 import { AppModule } from './app.module'
 import {
-  ACCESS_TOKEN_COOKIE,
-  CSRF_TOKEN_COOKIE,
+  getAuthCookieOptions,
   SKIP_CSRF_PROTECTION_PATHS,
 } from './utils/auth-cookie'
-import { Env, isProductionEnv } from './utils/env'
+import { Env } from './utils/env'
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule)
@@ -31,14 +30,13 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe())
 
   const { doubleCsrfProtection } = doubleCsrf({
-    cookieName: isProductionEnv() ? undefined : CSRF_TOKEN_COOKIE,
+    cookieName: configService.getOrThrow('CSRF_COOKIE_NAME', { infer: true }),
     getSecret: () => configService.getOrThrow('CSRF_SECRET', { infer: true }),
     getSessionIdentifier: (req) =>
-      (req.cookies[ACCESS_TOKEN_COOKIE] as string | undefined) || 'anonymous',
-    cookieOptions: {
-      sameSite: isProductionEnv() ? 'none' : undefined,
-      maxAge: configService.getOrThrow('COOKIE_EXPIRES_MS', { infer: true }),
-    },
+      (req.cookies[
+        configService.getOrThrow('JWT_COOKIE_NAME', { infer: true })
+      ] as string | undefined) || 'anonymous',
+    cookieOptions: getAuthCookieOptions(),
     errorConfig: {
       message: 'Invalid CSRF token',
     },

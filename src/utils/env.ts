@@ -6,9 +6,11 @@ export const envSchema = z.object({
   MONGODB_URI: z.string({
     error: 'MONGODB_URI environment is required',
   }),
+  JWT_COOKIE_NAME: z.string().default('__Host-presentation-api.access-token'),
   JWT_SECRET: z.string({
     error: 'JWT_SECRET environment is required',
   }),
+  CSRF_COOKIE_NAME: z.string().default('__Host-presentation-api.x-csrf-token'),
   CSRF_SECRET: z.string({
     error: 'CSRF_SECRET environment is required',
   }),
@@ -27,6 +29,8 @@ export const envSchema = z.object({
 })
 
 export type Env = z.infer<typeof envSchema>
+
+export const env = envSchema.parse(process.env)
 
 export function isProductionEnv() {
   return process.env.NODE_ENV === 'production'

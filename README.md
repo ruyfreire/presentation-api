@@ -43,7 +43,9 @@ cp .env.example .env
 | --------------------------- | --------------------------------------------------- | ----------- |
 | `PORT` / `HOST`             | Porta e host que o Nest sobe                        | Não         |
 | `MONGODB_URI`               | URI de conexão com o banco                          | Sim         |
+| `JWT_COOKIE_NAME`           | Nome do cookie para o token JWT                     | Não         |
 | `JWT_SECRET`                | Secret para o token JWT                             | Sim         |
+| `CSRF_COOKIE_NAME`          | Nome do cookie para o CSRF token                    | Não         |
 | `CSRF_SECRET`               | Secret para o CSRF token                            | Sim         |
 | `COOKIE_EXPIRES_MS`         | Validade do JWT e do cookie, em milissegundos       | Não         |
 | `CORS_ORIGINS`              | String de origens permitidas, separadas por vírgula | Sim         |

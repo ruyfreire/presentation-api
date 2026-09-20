@@ -24,12 +24,12 @@ sequenceDiagram
   Client->>API: POST /auth/signin
   API->>DB: findByEmail
   API->>API: bcrypt.compare e jwt.sign
-  API-->>Client: Set-Cookie access_token HttpOnly
+  API-->>Client: Set-Cookie JWT_COOKIE_NAME HttpOnly
   API-->>Client: body csrfToken
   Client->>API: GET /auth/me cookie
   API->>API: JwtStrategy
   API-->>Client: user
-  Client->>API: POST /profile cookie e X-CSRF-Token
+  Client->>API: POST /profile cookie e CSRF_COOKIE_NAME
   API->>API: JwtStrategy e CsrfGuard
   Client->>API: POST /auth/logout
   API-->>Client: clearCookie
@@ -71,7 +71,7 @@ src/
 
 ## Auth
 
-O `AuthGuard` (Passport JWT) é global. O token fica no cookie HttpOnly `access_token` — salvo rotas com `@Public()`. Mutações autenticadas também passam pelo CSRF, que exige cookie HttpOnly e o csrfToken retornado no login. Leitura pública, escrita autenticada.
+O `AuthGuard` (Passport JWT) é global. O token fica no cookie HttpOnly — salvo rotas com `@Public()`. Mutações autenticadas também passam pelo CSRF, que exige cookie HttpOnly e o csrfToken. Leitura pública, escrita autenticada.
 
 ## Versionamento
 
@@ -84,7 +84,7 @@ O `GET /profile` devolve só a última versão. O número vem no payload (`versi
 | Método | Path           | Auth      | Papel                                                                                                      |
 | ------ | -------------- | --------- | ---------------------------------------------------------------------------------------------------------- |
 | `POST` | `/auth/signin` | pública   | Login com `email` e `password`. Seta o cookie HttpOnly e devolve `csrfToken`.                              |
-| `GET`  | `/auth/me`     | protegida | Devolve o `user` da sessão.                                                                                |
+| `GET`  | `/auth/me`     | protegida | Devolve o `user` e `csrfToken` da sessão.                                                                  |
 | `POST` | `/auth/logout` | protegida | Remove o cookie JWT e o cookie CSRF.                                                                       |
 | `GET`  | `/profile`     | pública   | Retorna o currículo vigente. Aceita parâmetro `profileId` para definir o perfil. (valor padrão: `default`) |
 | `POST` | `/profile`     | protegida | Cria nova versão do currículo, com o nome de `profileId` recebido no corpo                                 |

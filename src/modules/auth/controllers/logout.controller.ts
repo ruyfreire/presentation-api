@@ -1,7 +1,7 @@
 import { Controller, HttpCode, HttpStatus, Post, Res } from '@nestjs/common'
 import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger'
 import type { Response } from 'express'
-import { ACCESS_TOKEN_COOKIE, CSRF_TOKEN_COOKIE } from 'src/utils/auth-cookie'
+import { clearAuthCookies } from 'src/utils/auth-cookie'
 
 @Controller('auth')
 @ApiTags('Auth')
@@ -24,8 +24,7 @@ export class LogoutController {
   @HttpCode(HttpStatus.OK)
   @Post('logout')
   logout(@Res({ passthrough: true }) res: Response) {
-    res.clearCookie(ACCESS_TOKEN_COOKIE)
-    res.clearCookie(CSRF_TOKEN_COOKIE)
+    clearAuthCookies(res)
 
     return {
       message: 'Signed out successfully',
