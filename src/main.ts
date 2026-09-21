@@ -26,6 +26,16 @@ async function bootstrap() {
     origin: configService.getOrThrow('CORS_ORIGINS', { infer: true }),
     credentials: true,
     methods: ['GET', 'POST', 'OPTIONS'],
+    allowedHeaders: [
+      'content-type',
+      'x-csrf-token',
+      'pragma',
+      'cache-control',
+      'newrelic',
+      'traceparent',
+      'tracestate',
+    ],
+    exposedHeaders: ['newrelic', 'traceparent', 'tracestate'],
   })
   app.useGlobalPipes(new ValidationPipe())
 
