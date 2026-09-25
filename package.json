@@ -14,12 +14,12 @@
     "start:prod": "node -r newrelic dist/main",
     "lint": "eslint \"src/**/*.ts\" --fix",
     "lint:check": "eslint \"src/**/*.ts\"",
-    "test": "jest",
-    "test:ci": "jest --config ./test/jest-e2e.json --ci",
-    "test:watch": "jest --watch",
-    "test:cov": "jest --coverage",
-    "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./test/jest-e2e.json",
+    "test:unit": "jest --config ./test/jest.json",
+    "test:unit:watch": "jest --config ./test/jest.json --watch",
+    "test:unit:coverage": "jest --config ./test/jest.json --coverage",
+    "test:integration": "jest --config ./test/jest-integration.json",
+    "test:integration:watch": "jest --config ./test/jest-integration.json --watch",
+    "test:e2e": "jest --config ./test/jest-e2e.json --runInBand",
     "test:e2e:watch": "jest --config ./test/jest-e2e.json --watch",
     "prepare": "husky"
   },
@@ -59,6 +59,7 @@
     "@nestjs/cli": "^11.0.0",
     "@nestjs/schematics": "^11.0.0",
     "@nestjs/testing": "^11.0.1",
+    "@testcontainers/mongodb": "^12.1.0",
     "@types/bcrypt": "^6.0.0",
     "@types/cookie-parser": "^1.4.10",
     "@types/express": "^5.0.0",
@@ -66,6 +67,7 @@
     "@types/node": "^24.0.0",
     "@types/passport-jwt": "^4.0.1",
     "@types/supertest": "^7.0.0",
+    "dotenv": "^18.0.3",
     "eslint": "^9.18.0",
     "eslint-config-prettier": "^10.0.1",
     "eslint-plugin-prettier": "^5.2.2",
@@ -77,28 +79,12 @@
     "prettier": "^3.4.2",
     "source-map-support": "^0.5.21",
     "supertest": "^7.0.0",
+    "testcontainers": "^12.1.0",
     "ts-jest": "^29.2.5",
     "ts-loader": "^9.5.2",
     "ts-node": "^10.9.2",
     "tsconfig-paths": "^4.2.0",
     "typescript": "^5.7.3",
     "typescript-eslint": "^8.20.0"
-  },
-  "jest": {
-    "moduleFileExtensions": [
-      "js",
-      "json",
-      "ts"
-    ],
-    "rootDir": "src",
-    "testRegex": ".*\\.spec\\.ts$",
-    "transform": {
-      "^.+\\.(t|j)s$": "ts-jest"
-    },
-    "collectCoverageFrom": [
-      "**/*.(t|j)s"
-    ],
-    "coverageDirectory": "../coverage",
-    "testEnvironment": "node"
   }
 }

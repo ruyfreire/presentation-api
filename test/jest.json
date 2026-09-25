@@ -1,11 +1,9 @@
 {
   "moduleFileExtensions": ["js", "json", "ts"],
   "rootDir": "..",
-  "roots": ["<rootDir>/test/e2e"],
+  "roots": ["<rootDir>/src"],
   "testEnvironment": "node",
-  "testRegex": ".*\\.e2e-spec\\.ts$",
-  "testTimeout": 180000,
-  "maxWorkers": 1,
+  "testRegex": ".*\\.spec\\.ts$",
   "transform": {
     "^.+\\.(t|j)s$": "ts-jest"
   },
@@ -13,8 +11,9 @@
     "node_modules/(?!\\.pnpm|@nestjs/passport|passport-jwt|passport/)"
   ],
   "moduleNameMapper": {
-    "^(\\.{1,2}/.*)\\.js$": "$1",
     "^src/(.*)$": "<rootDir>/src/$1"
   },
-  "setupFiles": ["<rootDir>/test/setup-env.ts"]
+  "setupFiles": ["<rootDir>/test/setup-env.ts"],
+  "collectCoverageFrom": ["<rootDir>/src/**/*.(t|j)s"],
+  "coverageDirectory": "<rootDir>/coverage"
 }

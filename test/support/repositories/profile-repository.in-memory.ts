@@ -1,7 +1,7 @@
 import { randomUUID } from 'node:crypto'
 
-import { Profile } from '../../entities'
-import { IProfileRepository } from '../../repositories/profile-repository.interface'
+import { Profile } from 'src/modules/profile/entities'
+import { IProfileRepository } from 'src/modules/profile/repositories/profile-repository.interface'
 
 export class ProfileRepositoryInMemory implements IProfileRepository {
   profiles: Profile[] = []
@@ -10,19 +10,21 @@ export class ProfileRepositoryInMemory implements IProfileRepository {
     return await Promise.resolve(
       this.profiles
         .filter((profile) => profile.profileId === profileId)
-        .sort((a, b) => b.version - a.version)[0] || null,
+        .sort((a, b) => b.version - a.version)[0] ?? null,
     )
   }
 
   async createProfile(profile: Profile) {
+    const profileVersions = this.profiles
+      .filter((item) => item.profileId === profile.profileId)
+      .map((item) => item.version)
     const lastVersion =
-      this.profiles.length > 0
-        ? Math.max(...this.profiles.map((profile) => profile.version))
-        : 0
+      profileVersions.length > 0 ? Math.max(...profileVersions) : 0
 
-    profile.version = lastVersion + 1
-
-    const profileToSave = this.addIdToDeepObject(profile)
+    const profileToSave = this.addIdToDeepObject({
+      ...profile,
+      version: lastVersion + 1,
+    })
 
     this.profiles.unshift(profileToSave)
     return await Promise.resolve(profileToSave)
@@ -37,26 +39,24 @@ export class ProfileRepositoryInMemory implements IProfileRepository {
       return object
     }
 
-    const newObject: Record<string, unknown> = object as Record<string, unknown>
+    const result = object as Record<string, unknown>
 
-    if ('id' in newObject) {
-      newObject.id = newObject.id || randomUUID()
+    if ('id' in result) {
+      result.id = result.id || randomUUID()
     }
 
     for (const key in object) {
       if (Array.isArray(object[key])) {
-        newObject[key] = object[key].map((item: Record<string, unknown>) =>
+        result[key] = object[key].map((item: Record<string, unknown>) =>
           this.addIdToDeepObject(item),
         )
       } else if (typeof object[key] === 'object') {
-        newObject[key] = this.addIdToDeepObject(
+        result[key] = this.addIdToDeepObject(
           object[key] as Record<string, unknown>,
         )
-      } else {
-        newObject[key] = object[key]
       }
     }
 
-    return newObject as T
+    return result as T
   }
 }
