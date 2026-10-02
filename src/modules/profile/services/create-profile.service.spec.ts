@@ -24,7 +24,7 @@ describe('CreateProfileService', () => {
     profile.profileId = 'default'
     profile.name = 'Ruy'
 
-    const createdProfile = { ...profile, id: 'profile-id', version: 1 }
+    const createdProfile = { ...profile, id: 'profile-id' }
     createProfileMock.mockResolvedValue(createdProfile)
 
     const result = await service.execute(profile)

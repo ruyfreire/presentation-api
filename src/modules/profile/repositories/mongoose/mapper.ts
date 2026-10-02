@@ -7,12 +7,13 @@ export class ProfileMapper {
 
     domainProfile.id = raw.id.toString()
     domainProfile.profileId = raw.profileId
-    domainProfile.version = raw.version
     domainProfile.name = raw.name
     domainProfile.role = raw.role
     domainProfile.bio = raw.bio
     domainProfile.imageUrl = raw.imageUrl
     domainProfile.skills = raw.skills
+    domainProfile.createdAt = raw.createdAt
+    domainProfile.updatedAt = raw.updatedAt
 
     const contact = new Contact()
     contact.location = raw.contact.location
