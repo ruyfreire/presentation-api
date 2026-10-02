@@ -1,12 +1,6 @@
 import { Document, Schema } from 'mongoose'
 
-import {
-  Contact,
-  Education,
-  Experience,
-  Profile,
-  ProfileVersionCounter,
-} from '../../entities'
+import { Contact, Education, Experience, Profile } from '../../entities'
 
 export type ProfileDocument = Profile & Document
 
@@ -42,7 +36,6 @@ const EducationSchema = new Schema<Education>({
 export const ProfileSchema = new Schema<Profile>(
   {
     profileId: { type: String, required: true },
-    version: { type: Number, required: true, default: 1 },
     name: { type: String, required: true, trim: true },
     role: { type: String, required: true },
     bio: { type: String, default: null },
@@ -58,17 +51,4 @@ export const ProfileSchema = new Schema<Profile>(
   },
 )
 
-ProfileSchema.index({ profileId: 1, version: 1 }, { unique: true })
-
-export type ProfileVersionCounterDocument = ProfileVersionCounter & Document
-
-export const ProfileVersionCounterSchema = new Schema<ProfileVersionCounter>(
-  {
-    profileId: { type: String, required: true, unique: true },
-    version: { type: Number, required: true, default: 0 },
-  },
-  {
-    _id: false,
-    collection: 'profile_version_counters',
-  },
-)
+ProfileSchema.index({ profileId: 1, createdAt: -1 })

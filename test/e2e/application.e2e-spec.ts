@@ -84,7 +84,7 @@ describe('Application E2E', () => {
     await agent.get('/auth/me').expect(200)
   })
 
-  it('create profile version [POST /profile]', async () => {
+  it('create profile [POST /profile]', async () => {
     profileDto = createProfileFixture()
 
     const createdResponse = await agent
@@ -95,7 +95,7 @@ describe('Application E2E', () => {
 
     expect(createdResponse.body).toMatchObject({
       message: 'Profile created successfully',
-      data: { ...profileDto, version: 1 },
+      data: profileDto,
     })
   })
 
@@ -107,7 +107,7 @@ describe('Application E2E', () => {
 
     expect(fetchedResponse.body).toMatchObject({
       message: 'Profile fetched successfully',
-      data: { ...profileDto, version: 1 },
+      data: profileDto,
     })
   })
 

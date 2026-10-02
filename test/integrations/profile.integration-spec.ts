@@ -1,7 +1,7 @@
 import { INestApplication, ValidationPipe } from '@nestjs/common'
 import { getModelToken } from '@nestjs/mongoose'
 import { Test } from '@nestjs/testing'
-import { Profile, ProfileVersionCounter } from 'src/modules/profile/entities'
+import { Profile } from 'src/modules/profile/entities'
 import { ProfileModule } from 'src/modules/profile/profile.module'
 import { PROFILE_REPOSITORY } from 'src/modules/profile/repositories/profile-repository.interface'
 import request from 'supertest'
@@ -21,8 +21,6 @@ describe('Profile HTTP integration', () => {
       .overrideProvider(PROFILE_REPOSITORY)
       .useClass(ProfileRepositoryInMemory)
       .overrideProvider(getModelToken(Profile.name))
-      .useValue({})
-      .overrideProvider(getModelToken(ProfileVersionCounter.name))
       .useValue({})
       .compile()
 
@@ -51,17 +49,17 @@ describe('Profile HTTP integration', () => {
     expect(created.status).toBe(201)
     expect(created.body).toMatchObject({
       message: 'Profile created successfully',
-      data: { profileId: profile.profileId, version: 1 },
+      data: profile,
     })
 
     const fetched = await request(app.getHttpServer())
       .get('/profile')
-      .query({ profileId: profile.profileId })
+      .query(profile)
 
     expect(fetched.status).toBe(200)
     expect(fetched.body).toMatchObject({
       message: 'Profile fetched successfully',
-      data: { profileId: profile.profileId, version: 1 },
+      data: profile,
     })
   })
 

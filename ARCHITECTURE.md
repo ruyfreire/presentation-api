@@ -75,19 +75,18 @@ O `AuthGuard` (Passport JWT) é global. O token fica no cookie HttpOnly — salv
 
 ## Versionamento
 
-Cada `POST /profile` incrementa um contador por `profileId` e **insere** um documento novo. Nada é sobrescrito.
-
-O `GET /profile` devolve só a última versão. O número vem no payload (`version`).
+Cada `POST /profile` incrementa o histórico e **insere** um documento novo. Nada é sobrescrito.
+O `GET /profile` devolve só o mais recente com base no `profileId`.
 
 ## Rotas
 
-| Método | Path           | Auth      | Papel                                                                                                      |
-| ------ | -------------- | --------- | ---------------------------------------------------------------------------------------------------------- |
-| `POST` | `/auth/signin` | pública   | Login com `email` e `password`. Seta o cookie HttpOnly e devolve `csrfToken`.                              |
-| `GET`  | `/auth/me`     | protegida | Devolve o `user` e `csrfToken` da sessão.                                                                  |
-| `POST` | `/auth/logout` | protegida | Remove o cookie JWT e o cookie CSRF.                                                                       |
-| `GET`  | `/profile`     | pública   | Retorna o currículo vigente. Aceita parâmetro `profileId` para definir o perfil. (valor padrão: `default`) |
-| `POST` | `/profile`     | protegida | Cria nova versão do currículo, com o nome de `profileId` recebido no corpo                                 |
-| `GET`  | `/api-status`  | pública   | Retorna o status da API e do Mongo.                                                                        |
+| Método | Path           | Auth      | Papel                                                                                             |
+| ------ | -------------- | --------- | ------------------------------------------------------------------------------------------------- |
+| `POST` | `/auth/signin` | pública   | Login com `email` e `password`. Seta o cookie HttpOnly e devolve `csrfToken`.                     |
+| `GET`  | `/auth/me`     | protegida | Devolve o `user` e `csrfToken` da sessão.                                                         |
+| `POST` | `/auth/logout` | protegida | Remove o cookie JWT e o cookie CSRF.                                                              |
+| `GET`  | `/profile`     | pública   | Retorna o currículo mais recente, com base no `profileId`. (valor padrão de profileId: `default`) |
+| `POST` | `/profile`     | protegida | Insere um novo currículo, sem sobrescrever o anterior                                             |
+| `GET`  | `/api-status`  | pública   | Retorna o status da API e do Mongo.                                                               |
 
 CORS aceita só origens em `CORS_ORIGINS`, com `credentials`. Throttler global (10 req/min) e POSTs de escrita (5/min).
